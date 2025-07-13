@@ -48,6 +48,7 @@ db.use_database("placement_app")
 # Title
 st.text("Student Placement Track Data")
 
+# Topbar for filtering options
 options = ["Placed", "Not Ready", "Ready"]
 with st.container( border=True):
     col1, col2 = st.columns(2)
@@ -67,17 +68,22 @@ with st.container( border=True):
             min_value=0,
             max_value=5)
 
+# Filter data based on user input
 filter={
     "placement_status": selected_options if selected_options else ["Placed", "Not Ready", "Ready"],
-    "mock_interview_score": mock_interview_score,
-    "internships_completed": intenship_completed,
-    "problems_solved": problem_solved
+    "mock_interview_score": mock_interview_score if mock_interview_score else 0,
+    "internships_completed": intenship_completed if intenship_completed else 0,
+    "problems_solved": problem_solved if problem_solved else 0
 }
 
+#fetching Students data
 student_data = get_students_data()
+
+# Filter the data based on user input using pandas
 filter_data = student_data[student_data["placement_status"].isin(filter["placement_status"]) & 
                             (student_data["mock_interview_score"] >= filter["mock_interview_score"]) & 
                             (student_data["internships_completed"] >= filter["internships_completed"]) & 
                             (student_data["problems_solved"] >= filter["problems_solved"])]
 
+# Display the filtered data
 st.dataframe(filter_data, use_container_width=True, hide_index=True)

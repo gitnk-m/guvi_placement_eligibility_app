@@ -212,5 +212,3 @@ if dbSetUP:
     finally:
         db.close()
         print("Database operations completed.")
-
-# db.query("SELECT co* FROM placements")

@@ -174,7 +174,7 @@ table_title = {
                     limit 10;''',
         },
     "students_course_data":{
-        "title":"top Courses Students Got Placed",
+        "title":"Top Courses Students Got Placed",
         "query":'''select 
                         s.course_batch as Course,
                         count(*) as Students_Placed

@@ -10,6 +10,7 @@ def get_students_data():
                     s.email,
                     s.course_batch,
                     pr.language,
+                    p.placement_status,
                     s.graduation_year,
                     p.mock_interview_score,
                     p.internships_completed,
@@ -23,12 +24,13 @@ def get_students_data():
                     ss.presentation,
                     ss.leadership,
                     ss.critical_thinking,
-                    ss.interpersonal_skills
+                    ss.interpersonal_skills,
+                    p.company_name,
+                    p.placement_package
                 FROM students s  
                 join placements p on s.student_id = p.student_id
                 join programming pr on s.student_id = pr.student_id
                 join soft_skills ss on s.student_id = ss.student_id
-                WHERE p.placement_status IN ('Ready', 'Not Ready')
                 ORDER BY s.name;'''
     data = pd.read_sql(query, db.connection)
     return data
@@ -43,14 +45,39 @@ db = mySqlDB(
 # Use the database
 db.use_database("placement_app")
 
-st.title("Student Filter")
+# Title
+st.text("Student Placement Track Data")
 
-container = st.container(border=True)
-container.text("Filter Students by Placement Status")
+options = ["Placed", "Not Ready", "Ready"]
+with st.container( border=True):
+    col1, col2 = st.columns(2)
+    with col1:
+        selected_options = st.pills("Select Placement Status", options, selection_mode="multi")
+        problem_solved = st.number_input(
+            "Minimum Problems Solved",
+            min_value=0,
+            max_value=500)
+    with col2:   
+        mock_interview_score = st.number_input(
+            "Minimum Mock Interview Score",
+            min_value=0,
+            max_value=100)
+        intenship_completed = st.number_input(
+            "Minimum Internships Completed",
+            min_value=0,
+            max_value=5)
 
-filter={}
-
+filter={
+    "placement_status": selected_options if selected_options else ["Placed", "Not Ready", "Ready"],
+    "mock_interview_score": mock_interview_score,
+    "internships_completed": intenship_completed,
+    "problems_solved": problem_solved
+}
 
 student_data = get_students_data()
+filter_data = student_data[student_data["placement_status"].isin(filter["placement_status"]) & 
+                            (student_data["mock_interview_score"] >= filter["mock_interview_score"]) & 
+                            (student_data["internships_completed"] >= filter["internships_completed"]) & 
+                            (student_data["problems_solved"] >= filter["problems_solved"])]
 
-st.dataframe(student_data, use_container_width=True, hide_index=True)
+st.dataframe(filter_data, use_container_width=True, hide_index=True)

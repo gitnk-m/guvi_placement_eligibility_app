@@ -1,0 +1,16 @@
+insight 
+    placement
+        * placement status                                    -   bar chart
+        * top 10 students ready to palcement based on mock    -   table
+        * top 10 students palced and package                  -   table
+        ----- top 10 students based on mock with placement status -   table
+    programming
+        * langage selection                                   -   bar chart
+        * top 10 students submission                          -   chart
+        * top 10 students with more problems solved           -   table
+        * top 10 students with high score on latest project   -   table
+    soft_skills
+        * top 10 students with high average soft_skills       -   table
+    students
+        * course selected                                     -   chart
+

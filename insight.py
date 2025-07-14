@@ -8,7 +8,7 @@ class insight_obj:
         pass
 
     def simple_bar_chart(self, query, title, legend, column):
-        pip 
+        data = pd.read_sql(query, db.connection)
         placement_df = data.set_index(legend)
         with column:
             st.text(title)
